@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, { useState, useCallback } from 'react';
 import './App.css';
+import { Search } from './Pages/Search'
+import { Weather } from './Pages/Weather/Weather'
 
 function App() {
+
+  const [selectedCity, setSelectedCity] = useState({})
+
+  const onSelectCity = useCallback(
+    (data) => {
+        setSelectedCity(data); 
+    },
+    [setSelectedCity],
+  )
+
+  const goBack = useCallback(
+    () => {
+      setSelectedCity({});
+    },
+    [],
+  )
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        {Object.keys(selectedCity).length === 0
+        ? <Search onSelectCity={onSelectCity} />
+        : <Weather selectedCity={selectedCity} goBack={goBack} />}
     </div>
   );
 }
